@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ubicación del Usuario</title>
+</head>
+<body>
+  <h2>Obtener ubicación</h2>
+  <button onclick="obtenerUbicacion()">Mostrar mi ubicación</button>
+  <p id="ubicacion"></p>
+
+  <script>
+    function obtenerUbicacion() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(mostrarUbicacion, mostrarError);
+      } else {
+        document.getElementById("ubicacion").innerText = "La geolocalización no es compatible con este navegador.";
+      }
+    }
+
+    function mostrarUbicacion(posicion) {
+      const lat = posicion.coords.latitude;
+      const lon = posicion.coords.longitude;
+      document.getElementById("ubicacion").innerHTML = 
+        `Latitud: ${lat} <br> Longitud: ${lon}`;
+      
+      // Aquí podrías enviar la ubicación a tu servidor si lo necesitas:
+      /*
+      fetch("https://tuservidor.com/guardar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ latitud: lat, longitud: lon })
+      });
+      */
+    }
+
+    function mostrarError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("El usuario denegó el permiso para la geolocalización.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("La información de ubicación no está disponible.");
+          break;
+        case error.TIMEOUT:
+          alert("Se agotó el tiempo de espera para obtener la ubicación.");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("Ocurrió un error desconocido.");
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
